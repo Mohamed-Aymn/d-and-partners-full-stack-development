@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #ffffff;
+    }
+
+    .spinner {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      animation: spin 5s infinite;
+    }
+
+    .dot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border-radius: 50%;
+
+      /* Pure CSS Magic: Rotate first around the center, then push outward */
+      transform: translate(-50%, -50%) rotate(calc(var(--i) * 40deg)) translateY(-45px);
+      background-color: rgba(0, 0, 0, calc(0.15 * var(--i)));
+
+      /* Dynamically scale dots smaller to larger based on index */
+      width: calc(10px + (var(--i) * 1.5px));
+      height: calc(10px + (var(--i) * 1.5px));
+    }
+
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      10% {
+        transform: rotate(36deg);
+      }
+
+      20% {
+        transform: rotate(72deg);
+      }
+
+      30% {
+        transform: rotate(108deg);
+      }
+
+      40% {
+        transform: rotate(144deg);
+      }
+
+      50% {
+        transform: rotate(180deg);
+      }
+
+      60% {
+        transform: rotate(216deg);
+      }
+
+      70% {
+        transform: rotate(252deg);
+      }
+
+      80% {
+        transform: rotate(288deg);
+      }
+
+      90% {
+        transform: rotate(324deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="spinner">
+    <div class="dot" style="--i: 1;"></div>
+    <div class="dot" style="--i: 2;"></div>
+    <div class="dot" style="--i: 3;"></div>
+    <div class="dot" style="--i: 4;"></div>
+    <div class="dot" style="--i: 5;"></div>
+    <div class="dot" style="--i: 6;"></div>
+    <div class="dot" style="--i: 7;"></div>
+    <div class="dot" style="--i: 8;"></div>
+    <div class="dot" style="--i: 9;"></div>
+  </div>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+<!-- refactor -->
+<!-- <style>
+    .spinner {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      animation: spin 1s steps(10) infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style> -->
