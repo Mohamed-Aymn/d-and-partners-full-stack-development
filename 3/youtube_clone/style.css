@@ -1,0 +1,43 @@
+body {
+  position: relative;
+}
+
+nav {
+  position: sticky;
+  top: 0;
+
+  background-color: red;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 5px;
+}
+
+#main_content {
+  display: flex;
+  gap: 20px;
+}
+
+aside {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+main {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}
+
+.image {
+  width: 200px;
+  height: 200px;
+  background-color: grey;
+}
+
+.card {
+  display: flex;
+  gap: 20px;
+}
