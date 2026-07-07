@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+
+    :root{
+        --container-height: 20%;
+    }
+
+</style>
+<body>
+    <div style="background: red; height: (--container-height);"></div>
+    <div style="background: green; height: calc(100%-var(--container-height));"></div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    #animated_idv {
+      /* normal styles */
+      background-color: red;
+      color: white;
+      font-weight: bold;
+      padding: 10px;
+      position: fixed;
+
+
+
+      /* animation styles */
+      animation-name: example;
+      animation-duration: 4s;
+      animation-iteration-count: infinite;
+    }
+
+
+
+
+    @keyframes example {
+      0% {
+        left: 0px;
+        top: 0px;
+      }
+
+      25% {
+        left: 200px;
+        top: 0px;
+      }
+
+      50% {
+        left: 200px;
+        top: 200px;
+      }
+
+      75% {
+        left: 0px;
+        top: 200px;
+      }
+
+      100% {
+        left: 0px;
+        top: 0px;
+      }
+    }
+  </style>
+
+
+</head>
+
+<body>
+
+
+
+
+
+  <span id="animated_idv">
+    Animated Div
+  </span>
+
+
+
+
+</body>
+
+</html>
