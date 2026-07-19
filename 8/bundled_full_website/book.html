@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book — Shelf</title>
+    <meta name="description" content="Book details, reading progress, and notes on Shelf." />
+    <meta name="keywords" content="reading tracker, books, bookshelf, reading list, progress, notes, Shelf" />
+    <meta name="author" content="Shelf" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#1a2421" />
+    <link rel="canonical" href="https://example.com/book.html" />
+    <link rel="icon" href="./assets/favicon/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="./assets/favicon/favicon.ico" />
+
+    <meta property="og:site_name" content="Shelf" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Book — Shelf" />
+    <meta property="og:description" content="Book details, reading progress, and notes on Shelf." />
+    <meta property="og:image" content="./assets/imgs/img.webp" />
+    <meta property="og:url" content="https://example.com/book.html" />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Book — Shelf" />
+    <meta name="twitter:description" content="Book details, reading progress, and notes on Shelf." />
+    <meta name="twitter:image" content="./assets/imgs/img.webp" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles/common/index.css" />
+    <link rel="stylesheet" href="./styles/pages/book.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="topbar__brand" href="./index.html">Shelf</a>
+      <nav class="nav" aria-label="Primary">
+        <a href="./index.html" class="nav__link">Home</a>
+        <a href="./library.html" class="nav__link nav__link--active">Library</a>
+        <a href="./add.html" class="nav__link">Add</a>
+        <a href="./about.html" class="nav__link">About</a>
+      </nav>
+    </header>
+
+    <main class="view">
+      <section class="page page--book" id="book-detail"></section>
+    </main>
+    <script type="module" src="./js/book.js"></script>
+  </body>
+</html>

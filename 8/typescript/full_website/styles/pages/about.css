@@ -1,0 +1,27 @@
+@scope (.page--about) {
+  .prose {
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    max-width: 60ch;
+  }
+
+  .prose p + p,
+  .prose p + ul,
+  .prose p + .btn,
+  .prose .btn + ul {
+    margin-top: 0.85rem;
+  }
+
+  .prose__list {
+    padding-left: 1.2rem;
+  }
+
+  .prose__code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.9em;
+    background: rgba(26, 36, 33, 0.06);
+    padding: 0.1em 0.35em;
+    border-radius: 6px;
+  }
+}

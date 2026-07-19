@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Handlebars.js Example</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js">
+  </script>
+</head>
+
+<body>
+
+  <div id="output"></div>
+
+  <script id="user-template" type="text/x-handlebars-template">
+    <div class="profile-card">
+      <h2>{{title}}</h2>
+      <p>Welcome back, <strong>{{user.firstName}} {{user.lastName}}</strong>!</p>
+      
+      {{#if user.isAdmin}}
+        <p style="color: red; font-weight: bold;">Role: Administrator</p>
+      {{else}}
+        <p>Role: Standard User</p>
+      {{/if}}
+
+      <h3>Favorite Languages:</h3>
+      <ul>
+        {{#each favoriteLanguages}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+  </script>
+
+  <script>
+    // A. Define the data object
+    const contextData = {
+      title: "User Profile",
+      user: {
+        firstName: "Jane",
+        lastName: "Doe",
+        isAdmin: true
+      },
+      favoriteLanguages: ["JavaScript", "TypeScript", "HTML/CSS"]
+    };
+
+    // B. Get the template source from the DOM
+    const templateSource = document.getElementById("user-template").innerHTML;
+
+    // C. Compile the template into a reusable function
+    const template = Handlebars.compile(templateSource);
+
+    // D. Execute the template function with our data to get the final HTML
+    const renderedHtml = template(contextData);
+
+    // E. Insert the generated HTML into the page
+    document.getElementById("output").innerHTML = renderedHtml;
+  </script>
+
+</body>
+
+</html>

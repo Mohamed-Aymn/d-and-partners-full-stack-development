@@ -1,0 +1,24 @@
+.text-link {
+  color: var(--teal);
+  font-weight: 600;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+}
+
+.text-link--back {
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.text--muted {
+  color: var(--muted);
+}
+
+.empty {
+  padding: 1.25rem;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  color: var(--muted);
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library — Shelf</title>
+    <meta name="description" content="Browse every title on your Shelf — filter by reading, want to read, or finished." />
+    <meta name="keywords" content="reading tracker, books, bookshelf, reading list, progress, notes, Shelf" />
+    <meta name="author" content="Shelf" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#1a2421" />
+    <link rel="canonical" href="./library.html" />
+    <link rel="icon" href="./assets/favicon/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="./assets/favicon/favicon.ico" />
+
+    <meta property="og:site_name" content="Shelf" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Library — Shelf" />
+    <meta property="og:description" content="Browse every title on your Shelf — filter by reading, want to read, or finished." />
+    <meta property="og:image" content="./assets/imgs/img.webp" />
+    <meta property="og:url" content="./library.html" />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Library — Shelf" />
+    <meta name="twitter:description" content="Browse every title on your Shelf — filter by reading, want to read, or finished." />
+    <meta name="twitter:image" content="./assets/imgs/img.webp" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles/common/index.css" />
+    <link rel="stylesheet" href="./styles/pages/library.css" />
+  </head>
+<body>
+  <header class="topbar">
+    <a class="topbar__brand" href="./index.html">Shelf</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="./index.html" class="nav__link">Home</a>
+      <a href="./library.html" class="nav__link nav__link--active">Library</a>
+      <a href="./add.html" class="nav__link">Add</a>
+      <a href="./about.html" class="nav__link">About</a>
+    </nav>
+  </header>
+
+  <main class="view">
+    <section class="page page--library">
+      <div class="page__head">
+        <div>
+          <h1 class="page__title">Library</h1>
+          <p class="page__lead" id="library-count">Loading…</p>
+        </div>
+        <a class="btn btn--primary" href="./add.html">Add book</a>
+      </div>
+
+      <figure class="library-banner">
+        <img
+          class="library-banner__img"
+          src="./assets/imgs/img.webp"
+          alt="A quiet reading nook with books and soft light"
+          width="1919"
+          height="1281"
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption class="library-banner__caption">
+          Browse your shelf — every title in one place.
+        </figcaption>
+      </figure>
+
+      <div class="filters" role="tablist" aria-label="Filter by status">
+        <button type="button" class="chip chip--active" data-filter="all" role="tab" aria-selected="true">All</button>
+        <button type="button" class="chip" data-filter="reading" role="tab" aria-selected="false">Reading</button>
+        <button type="button" class="chip" data-filter="want" role="tab" aria-selected="false">Want</button>
+        <button type="button" class="chip" data-filter="finished" role="tab" aria-selected="false">Finished</button>
+      </div>
+
+      <div class="library-search">
+        <label class="library-search__label" for="library-search">Search titles or authors</label>
+        <input id="library-search" class="library-search__input" type="search" placeholder="Type to filter…"
+          autocomplete="off" />
+      </div>
+
+      <ul class="book-list" id="book-list"></ul>
+      <p class="empty library-empty" id="library-empty" hidden>No books match this filter.</p>
+    </section>
+  </main>
+
+  <script src="./js/state-management.js"></script>
+  <script src="./js/library.js"></script>
+</body>
+
+</html>

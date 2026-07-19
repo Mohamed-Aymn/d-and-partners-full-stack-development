@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    label::after {
+      content: "*";
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+
+  <form id="myForm">
+    <div>
+      <label for="name">Name</label>
+      <input id="name" name="name" type="text">
+    </div>
+    <div>
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email">
+    </div>
+
+    <button type="submit" id="submit">
+      Submit
+    </button>
+  </form>
+
+  <script>
+    const form = document.querySelector('#myForm');
+    const nameInput = document.querySelector('#name');
+    const emailInput = document.querySelector('#email');
+
+    form.addEventListener('submit', function (event) {
+      // Stop the form from submitting until we check the values
+      event.preventDefault();
+
+      let isValid = true;
+
+      // Name: required
+      if (nameInput.value.trim() === '') {
+        console.log('Name is required.');
+        isValid = false;
+      }
+
+      // Email: required + basic format check
+      if (emailInput.value.trim() === '') {
+        console.log('Email is required.');
+        isValid = false;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
+        console.log('Please enter a valid email.');
+        isValid = false;
+      }
+
+      if (isValid) {
+        console.log('Form submitted successfully!');
+        form.reset();
+      }
+    });
+  </script>
+</body>
+
+</html>
