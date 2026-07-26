@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .container__title {
+        color: red;
+      }
+
+      .container__paragraph {
+        color: green;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1 class="container__title">Title</h1>
+    <p class="container__paragraph">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti minus, atque veritatis laudantium voluptatum
+      quod asperiores reiciendis beatae rem nam quibusdam nobis cum dolorum perspiciatis, qui nihil molestiae itaque
+      placeat.
+    </p>
+    <button class="container__button">click me</button>
+  </div>
+
+
+  <script>
+    const btns = document.querySelectorAll('.container__button');
+    btns.map(btn => {
+      btn.addEventListener('click', () => {
+        console.log('clicked');
+      });
+    });
+  </script>
+</body>
+
+</html>

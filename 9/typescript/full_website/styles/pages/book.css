@@ -1,0 +1,104 @@
+@scope (.page--book) {
+  .book-detail {
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border-radius: calc(var(--radius) + 4px);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+
+  .book-detail__head {
+    margin-bottom: 1.5rem;
+  }
+
+  .book-detail__title {
+    margin: 0.55rem 0 0.35rem;
+    font-size: clamp(1.7rem, 4vw, 2.3rem);
+  }
+
+  .book-detail__author {
+    color: var(--muted);
+  }
+
+  .progress-block {
+    margin-bottom: 1.35rem;
+  }
+
+  .progress-block__meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.45rem;
+    color: var(--muted);
+  }
+
+  .progress {
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(26, 36, 33, 0.08);
+    overflow: hidden;
+    margin-bottom: 0.85rem;
+  }
+
+  .progress__fill {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), #3aa18f);
+    border-radius: inherit;
+    transition: width 0.25s ease;
+  }
+
+  .progress-block__control {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .progress-block__label {
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+
+  .progress-block__control input[type='range'] {
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .notes__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .notes__head .notes__title {
+    margin-bottom: 0;
+  }
+
+  .tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0;
+    margin: 0 0 1.35rem;
+  }
+
+  .tags__item {
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(26, 36, 33, 0.06);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .notes {
+    margin-bottom: 1.35rem;
+  }
+
+  .notes__title {
+    font-size: 1.1rem;
+    margin-bottom: 0.65rem;
+  }
+}
