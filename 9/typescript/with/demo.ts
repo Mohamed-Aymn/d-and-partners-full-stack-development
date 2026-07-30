@@ -4,7 +4,10 @@ function demo(x: number, y: number) {
 
 
 
-demo(2, 4)
+const number = demo(2, 4)
+console.log(number)
+console.log("hello -")
+
 // demo(2, "4")
 // demo(false, 6)
 

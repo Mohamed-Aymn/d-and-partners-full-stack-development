@@ -11,6 +11,7 @@ function Card() {
         quod asperiores reiciendis beatae rem nam quibusdam nobis cum dolorum perspiciatis, qui nihil molestiae itaque
         placeat.
       </p>
+      <p>Hello</p>
       <button onClick={clickHandler}>click me</button>
     </div>
   )

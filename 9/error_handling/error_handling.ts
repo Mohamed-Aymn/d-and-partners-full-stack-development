@@ -5,11 +5,11 @@ interface Item {
     Capacity?: string;
     Generation?: string;
     price?: string;
-    ["Screen size"]?: string;
   }
 }
 
 type Data = Item[]
+
 
 async function dataFetch() {
   try {
@@ -26,12 +26,10 @@ async function dataFetch() {
   } catch (error) {
     console.log("something happened")
   }
-
-
-  console.log("app didn't break")
 }
 
 
 
 
 dataFetch();
+console.log("hello")

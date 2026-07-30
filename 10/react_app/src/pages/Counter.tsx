@@ -11,6 +11,7 @@ function Counter() {
         <div className="brand">Shop Demo</div>
         <div className="cart-icon-wrap" aria-label="Cart">
           🛒
+          {/* 2. use state variable in the html */}
           <span className="cart-badge">{count}</span>
         </div>
       </nav>
@@ -20,12 +21,12 @@ function Counter() {
           <h1>Counter</h1>
           <p>Each click updates one shared count — shown in three places on this page.</p>
           <div className="counter">
-            {/* 2. event listener */}
-            <button type="button" aria-label="Decrease" onClick={() => setCount(count - 1)}>
+            {/* 3. event listener */}
+            <button type="button" onClick={() => setCount(count - 1)}>
               −
             </button>
             <span>{count}</span>
-            <button type="button" aria-label="Increase" onClick={() => setCount(count + 1)}>
+            <button type="button" onClick={() => setCount(count + 1)}>
               +
             </button>
           </div>
