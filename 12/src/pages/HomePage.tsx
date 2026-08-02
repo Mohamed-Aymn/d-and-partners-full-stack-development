@@ -8,17 +8,18 @@ import { cn } from '@/lib/utils'
 export function HomePage() {
   const [active, setActive] = useState('All')
 
+  const videoCategories = new Set(videos.map((v) => v.category))
+  const tags = categories.filter((cat) => cat === 'All' || videoCategories.has(cat))
+
   const shown =
-    active === 'All' || !['Science', 'Tech', 'Coding', 'Design'].includes(active)
-      ? videos
-      : videos.filter((v) => v.category === active)
+    active === 'All' ? videos : videos.filter((v) => v.category === active)
 
   return (
     <div className="px-4 pb-10 pt-3 sm:px-6">
       <div className="sticky top-14 z-30 -mx-4 mb-4 bg-background px-4 py-3 sm:-mx-6 sm:px-6">
         <ScrollArea className="w-full whitespace-nowrap">
           <div className="flex gap-3 pb-1">
-            {categories.map((cat) => (
+            {tags.map((cat) => (
               <Button
                 key={cat}
                 type="button"

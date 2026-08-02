@@ -149,13 +149,18 @@ export function WatchPage() {
           <Button
             type="button"
             variant="secondary"
-            className="mt-3 h-auto w-full flex-col items-start gap-1 rounded-xl p-3 text-left font-normal whitespace-normal"
+            className="mt-3 h-auto w-full flex-col items-start gap-1 rounded-xl p-3 text-left font-normal whitespace-normal hover:bg-secondary"
             onClick={() => setDescOpen((v) => !v)}
           >
             <span className="text-sm font-medium">
               {video.viewsExact} views · {video.uploadedExact}
             </span>
-            <span className={cn('text-sm leading-5', !descOpen && 'line-clamp-2')}>
+            <span
+              className={cn(
+                'w-full text-sm leading-5 whitespace-pre-wrap',
+                !descOpen && 'line-clamp-2',
+              )}
+            >
               {video.description}
             </span>
             <span className="text-sm font-medium">
@@ -230,23 +235,6 @@ export function WatchPage() {
       </div>
 
       <aside className="w-full shrink-0 px-3 sm:px-4 lg:w-[402px] lg:px-0">
-        <ScrollArea className="mb-3 w-full whitespace-nowrap">
-          <div className="flex gap-2 pb-1">
-            {['All', 'From related', 'For you'].map((chip) => (
-              <Button
-                key={chip}
-                type="button"
-                size="sm"
-                variant={relatedFilter === chip ? 'default' : 'secondary'}
-                className="shrink-0 rounded-lg"
-                onClick={() => setRelatedFilter(chip)}
-              >
-                {chip}
-              </Button>
-            ))}
-          </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
         <div className="flex flex-col gap-3">
           {related.map((v) => (
             <VideoCard key={v.id} video={v} layout="row" />
