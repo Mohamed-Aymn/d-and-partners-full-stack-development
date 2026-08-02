@@ -104,15 +104,6 @@ export function Header({ onMenuClick }: HeaderProps) {
             <Search className="size-5" />
           </Button>
         </div>
-        <Button
-          type="button"
-          variant="secondary"
-          size="icon"
-          className="rounded-full"
-          aria-label="Search with your voice"
-        >
-          <Microphone className="size-5" />
-        </Button>
       </div>
 
       <div className="flex items-center gap-0.5 sm:gap-1">
