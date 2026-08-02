@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Search } from 'tabler-icons-react'
 import {
   getChannel,
   getChannelVideos,
@@ -10,17 +9,12 @@ import { VideoCard } from '@/components/pages/common/VideoCard'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Separator } from '@/components/ui/separator'
-
-const tabs = ['Home', 'Videos', 'Shorts', 'Live', 'Podcasts', 'Playlists', 'Posts', 'About'] as const
 
 export function ChannelPage() {
   const { channelId = 'mkbhd' } = useParams()
   const channel = getChannel(channelId) ?? getChannel('mkbhd')!
   const channelVideos = getChannelVideos(channel.id)
   const displayVideos = channelVideos.length ? channelVideos : allVideos.slice(0, 8)
-  const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>('Videos')
   const [subscribed, setSubscribed] = useState(false)
   const [sort, setSort] = useState('Latest')
 
@@ -90,127 +84,26 @@ export function ChannelPage() {
         </div>
       </div>
 
-      <Tabs
-        value={activeTab}
-        onValueChange={(v) => setActiveTab(v as (typeof tabs)[number])}
-        className="gap-0"
-      >
-        <div className="sticky top-14 z-20 border-b bg-background px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center">
-            <TabsList className="h-auto flex-1 justify-start gap-0 overflow-x-auto rounded-none bg-transparent p-0 scrollbar-none">
-              {tabs.map((tab) => (
-                <TabsTrigger
-                  key={tab}
-                  value={tab}
-                  className="rounded-none border-b-2 border-transparent px-4 py-3 text-sm text-muted-foreground shadow-none data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
-                >
-                  {tab}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+      <div className="px-4 pt-6 sm:px-6 lg:px-8">
+        <div className="mb-4 flex gap-2">
+          {['Latest', 'Popular', 'Oldest'].map((option) => (
             <Button
+              key={option}
               type="button"
-              variant="ghost"
-              size="icon"
-              className="shrink-0 rounded-full"
-              aria-label="Search channel"
+              size="sm"
+              variant={sort === option ? 'default' : 'secondary'}
+              className="rounded-lg"
+              onClick={() => setSort(option)}
             >
-              <Search className="size-5" />
+              {option}
             </Button>
-          </div>
+          ))}
         </div>
-
-        <div className="px-4 pt-6 sm:px-6 lg:px-8">
-          <TabsContent value="About" className="mt-0">
-            <AboutPanel channel={channel} />
-          </TabsContent>
-
-          <TabsContent value="Home" className="mt-0 space-y-8">
-            <section>
-              <h2 className="mb-4 text-base font-bold">For you</h2>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {displayVideos.slice(0, 4).map((video) => (
-                  <VideoCard key={video.id} video={video} layout="channel" />
-                ))}
-              </div>
-            </section>
-            <section>
-              <h2 className="mb-4 text-base font-bold">Videos</h2>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {displayVideos.map((video) => (
-                  <VideoCard key={video.id} video={video} layout="channel" />
-                ))}
-              </div>
-            </section>
-          </TabsContent>
-
-          {tabs
-            .filter((t) => t !== 'About' && t !== 'Home')
-            .map((tab) => (
-              <TabsContent key={tab} value={tab} className="mt-0">
-                <div className="mb-4 flex gap-2">
-                  {['Latest', 'Popular', 'Oldest'].map((option) => (
-                    <Button
-                      key={option}
-                      type="button"
-                      size="sm"
-                      variant={sort === option ? 'default' : 'secondary'}
-                      className="rounded-lg"
-                      onClick={() => setSort(option)}
-                    >
-                      {option}
-                    </Button>
-                  ))}
-                </div>
-                <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {displayVideos.map((video) => (
-                    <VideoCard key={video.id} video={video} layout="channel" />
-                  ))}
-                </div>
-              </TabsContent>
-            ))}
+        <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {displayVideos.map((video) => (
+            <VideoCard key={video.id} video={video} layout="channel" />
+          ))}
         </div>
-      </Tabs>
-    </div>
-  )
-}
-
-function AboutPanel({
-  channel,
-}: {
-  channel: NonNullable<ReturnType<typeof getChannel>>
-}) {
-  return (
-    <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[1fr_300px]">
-      <div>
-        <h2 className="mb-3 text-base font-bold">Description</h2>
-        <p className="whitespace-pre-wrap text-sm leading-6">{channel.description}</p>
-        {channel.links.length > 0 ? (
-          <>
-            <h2 className="mb-3 mt-8 text-base font-bold">Links</h2>
-            <ul className="space-y-2">
-              {channel.links.map((link) => (
-                <li key={link.label}>
-                  <a href={link.url} className="text-sm font-medium text-blue-600">
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : null}
-      </div>
-      <div>
-        <h2 className="mb-3 text-base font-bold">Stats</h2>
-        <ul className="text-sm">
-          <li className="py-3">Joined {channel.joined}</li>
-          <Separator />
-          <li className="py-3">
-            {(channel.videoCount * 1_240_000).toLocaleString()} views
-          </li>
-          <Separator />
-          <li className="py-3">{channel.location}</li>
-        </ul>
       </div>
     </div>
   )
