@@ -1,46 +1,40 @@
-import {
-  Broadcast,
-  Edit,
-  Upload,
-  Video,
-} from 'tabler-icons-react'
+// import { Broadcast, Edit, Upload, Video } from 'tabler-icons-react'
+import { Video } from 'tabler-icons-react'
 import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+
 
 function HeaderCreateBtn() {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          className="rounded-full"
-          aria-label="Create"
+    <div className="relative">
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        className="rounded-full"
+        aria-label="Create"
+        aria-haspopup="menu"
+      >
+        <Video className="size-5" />
+      </Button>
+
+      {/* <div
+          role="menu"
+          className="absolute top-full right-0 z-50 mt-2 w-56 overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md"
         >
-          <Video className="size-5" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56" sideOffset={8}>
-        <DropdownMenuItem>
-          <Upload className="size-5" />
-          Upload video
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Broadcast className="size-5" />
-          Go live
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Edit className="size-5" />
-          Create post
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          <button type="button" role="menuitem" className={menuItemClass} onClick={close}>
+            <Upload className="size-5" />
+            Upload video
+          </button>
+          <button type="button" role="menuitem" className={menuItemClass} onClick={close}>
+            <Broadcast className="size-5" />
+            Go live
+          </button>
+          <button type="button" role="menuitem" className={menuItemClass} onClick={close}>
+            <Edit className="size-5" />
+            Create post
+          </button>
+        </div> */}
+    </div>
   )
 }
 

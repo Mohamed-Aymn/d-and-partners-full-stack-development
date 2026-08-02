@@ -1,21 +1,7 @@
-import { Link } from 'react-router-dom'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { channels, videos } from '@/data/videos'
-import {
-  Bell,
-  Settings,
-} from 'tabler-icons-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { Bell } from 'tabler-icons-react'
 
 const notifications = videos.slice(0, 5).map((video, i) => {
   const channel = channels[video.channelId]
@@ -28,46 +14,50 @@ const notifications = videos.slice(0, 5).map((video, i) => {
   }
 })
 
-
 function HeaderNotificationBtn() {
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          className="relative rounded-full"
-          aria-label="Notifications"
+    <div className="relative">
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        className="relative rounded-full"
+        aria-label="Notifications"
+        aria-haspopup="menu"
+      >
+        <Bell className="size-5" />
+        <Badge className="absolute -top-0.5 right-0 h-4 min-w-4 justify-center rounded-full bg-[var(--yt-red)] px-1 text-[10px] text-white hover:bg-[var(--yt-red)]">
+          9+
+        </Badge>
+      </Button>
+
+      {/* <div
+          role="menu"
+          className="absolute top-full right-0 z-50 mt-2 w-[360px] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md"
         >
-          <Bell className="size-5" />
-          <Badge className="absolute -top-0.5 right-0 h-4 min-w-4 justify-center rounded-full bg-[var(--yt-red)] px-1 text-[10px] text-white hover:bg-[var(--yt-red)]">
-            9+
-          </Badge>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[360px] p-0" sideOffset={8}>
-        <DropdownMenuLabel className="flex items-center justify-between px-4 py-3 font-normal">
-          <span className="text-base font-medium">Notifications</span>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            className="rounded-full"
-            aria-label="Notification settings"
-          >
-            <Settings className="size-5" />
-          </Button>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator className="m-0" />
-        <div className="max-h-[420px] overflow-y-auto py-1">
-          {notifications.map((notification) => (
-            <DropdownMenuItem
-              key={notification.id}
-              asChild
-              className="h-auto cursor-pointer items-start gap-3 rounded-none px-4 py-3"
+          <div className="flex items-center justify-between px-4 py-3">
+            <span className="text-base font-medium">Notifications</span>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              className="rounded-full"
+              aria-label="Notification settings"
             >
-              <Link to={`/watch/${notification.id}`}>
+              <Settings className="size-5" />
+            </Button>
+          </div>
+          <div className="h-px bg-border" />
+          <div className="max-h-[420px] overflow-y-auto py-1">
+            {notifications.map((notification) => (
+              <Link
+                key={notification.id}
+                to={`/watch/${notification.id}`}
+                role="menuitem"
+                className="flex h-auto cursor-pointer items-start gap-3 px-4 py-3 outline-hidden hover:bg-accent hover:text-accent-foreground"
+                onClick={close}
+              >
                 <Avatar className="mt-0.5 size-10 shrink-0">
                   <AvatarImage src={notification.avatar} alt="" />
                   <AvatarFallback>C</AvatarFallback>
@@ -84,11 +74,11 @@ function HeaderNotificationBtn() {
                   <span className="mt-2 size-2 shrink-0 rounded-full bg-blue-600" />
                 ) : null}
               </Link>
-            </DropdownMenuItem>
-          ))}
-        </div>
-      </DropdownMenuContent>
-    </DropdownMenu>
+            ))}
+          </div>
+        </div> */}
+
+    </div>
   )
 }
 

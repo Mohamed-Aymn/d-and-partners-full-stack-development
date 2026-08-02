@@ -27,5 +27,10 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    "src/components/layout/Header/HeaderCreateBtn.tsx",
+    "src/components/layout/Header/HeaderNotificationBtn.tsx",
+    "src/components/layout/Header/HeaderProfileBtn.tsx"
+  ]
 }
