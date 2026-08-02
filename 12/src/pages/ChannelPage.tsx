@@ -20,6 +20,7 @@ export function ChannelPage() {
 
   return (
     <div className="pb-10">
+      {/* cover */}
       <div className="px-4 pt-4 sm:px-6 lg:px-8">
         <div className="overflow-hidden rounded-xl">
           <img
@@ -30,6 +31,7 @@ export function ChannelPage() {
         </div>
       </div>
 
+      {/* channel details */}
       <div className="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-start sm:px-6 lg:px-8">
         <Avatar className="mx-auto size-28 sm:mx-0 sm:size-40">
           <AvatarImage src={channel.avatar} alt="" />
@@ -84,6 +86,7 @@ export function ChannelPage() {
         </div>
       </div>
 
+      {/* videos */}
       <div className="px-4 pt-6 sm:px-6 lg:px-8">
         <div className="mb-4 flex gap-2">
           {['Latest', 'Popular', 'Oldest'].map((option) => (
