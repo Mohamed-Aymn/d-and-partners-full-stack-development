@@ -9,11 +9,8 @@ import HeaderCreateBtn from './HeaderCreateBtn'
 import HeaderNotificationBtn from './HeaderNotificationBtn'
 import HeaderProfileBtn from './HeaderProfileBtn'
 
-type HeaderProps = {
-  onMenuClick: () => void
-}
 
-export function Header({ onMenuClick }: HeaderProps) {
+export function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex h-14 items-center justify-between bg-background px-2 sm:px-4">
       {/* left-hand side */}
@@ -23,7 +20,6 @@ export function Header({ onMenuClick }: HeaderProps) {
           variant="ghost"
           size="icon"
           className="rounded-full"
-          onClick={onMenuClick}
           aria-label="Menu"
         >
           <Menu2 className="size-5" />
