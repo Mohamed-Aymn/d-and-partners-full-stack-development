@@ -1,9 +1,21 @@
 import { Link } from 'react-router-dom'
 import {
   Bell,
+  BrandYoutube,
+  Broadcast,
+  Edit,
+  Help,
+  Keyboard,
+  Language,
+  Logout,
   Menu2,
   Microphone,
+  Moon,
   Search,
+  Settings,
+  SwitchHorizontal,
+  Upload,
+  User,
   Video,
 } from 'tabler-icons-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -11,16 +23,36 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { userAvatar } from '@/data/videos'
+import { channels, userAvatar, videos } from '@/data/videos'
 import { cn } from '@/lib/utils'
 
 type HeaderProps = {
   onMenuClick: () => void
 }
+
+const notifications = videos.slice(0, 5).map((video, i) => {
+  const channel = channels[video.channelId]
+  return {
+    id: video.id,
+    avatar: channel.avatar,
+    text: `${channel.name} uploaded: ${video.title}`,
+    time: video.uploaded,
+    unread: i < 3,
+  }
+})
 
 export function YouTubeLogo({ className }: { className?: string }) {
   return (
@@ -108,8 +140,9 @@ export function Header({ onMenuClick }: HeaderProps) {
         >
           <Search className="size-5" />
         </Button>
-        <Tooltip>
-          <TooltipTrigger asChild>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
             <Button
               type="button"
               variant="ghost"
@@ -119,11 +152,25 @@ export function Header({ onMenuClick }: HeaderProps) {
             >
               <Video className="size-5" />
             </Button>
-          </TooltipTrigger>
-          <TooltipContent>Create</TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56" sideOffset={8}>
+            <DropdownMenuItem>
+              <Upload className="size-5" />
+              Upload video
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Broadcast className="size-5" />
+              Go live
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Edit className="size-5" />
+              Create post
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
             <Button
               type="button"
               variant="ghost"
@@ -136,17 +183,139 @@ export function Header({ onMenuClick }: HeaderProps) {
                 9+
               </Badge>
             </Button>
-          </TooltipTrigger>
-          <TooltipContent>Notifications</TooltipContent>
-        </Tooltip>
-        <Button variant="ghost" size="icon" className="ml-1 rounded-full" asChild>
-          <Link to="/channel/mkbhd" aria-label="Your channel">
-            <Avatar className="size-8">
-              <AvatarImage src={userAvatar} alt="" />
-              <AvatarFallback>Y</AvatarFallback>
-            </Avatar>
-          </Link>
-        </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-[360px] p-0" sideOffset={8}>
+            <DropdownMenuLabel className="flex items-center justify-between px-4 py-3 font-normal">
+              <span className="text-base font-medium">Notifications</span>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                className="rounded-full"
+                aria-label="Notification settings"
+              >
+                <Settings className="size-5" />
+              </Button>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator className="m-0" />
+            <div className="max-h-[420px] overflow-y-auto py-1">
+              {notifications.map((notification) => (
+                <DropdownMenuItem
+                  key={notification.id}
+                  asChild
+                  className="h-auto cursor-pointer items-start gap-3 rounded-none px-4 py-3"
+                >
+                  <Link to={`/watch/${notification.id}`}>
+                    <Avatar className="mt-0.5 size-10 shrink-0">
+                      <AvatarImage src={notification.avatar} alt="" />
+                      <AvatarFallback>C</AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0 flex-1 space-y-1">
+                      <p className="line-clamp-2 text-sm leading-5 whitespace-normal">
+                        {notification.text}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {notification.time}
+                      </p>
+                    </div>
+                    {notification.unread ? (
+                      <span className="mt-2 size-2 shrink-0 rounded-full bg-blue-600" />
+                    ) : null}
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="ml-1 rounded-full"
+              aria-label="Account menu"
+            >
+              <Avatar className="size-8">
+                <AvatarImage src={userAvatar} alt="" />
+                <AvatarFallback>Y</AvatarFallback>
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-72 p-0" sideOffset={8}>
+            <DropdownMenuLabel className="p-0 font-normal">
+              <div className="flex items-start gap-3 px-4 py-3">
+                <Avatar className="size-10">
+                  <AvatarImage src={userAvatar} alt="" />
+                  <AvatarFallback>Y</AvatarFallback>
+                </Avatar>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium">You</p>
+                  <p className="truncate text-sm text-muted-foreground">@you</p>
+                  <Link
+                    to="/channel/mkbhd"
+                    className="mt-1 inline-block text-sm text-blue-600 hover:text-blue-700"
+                  >
+                    View your channel
+                  </Link>
+                </div>
+              </div>
+            </DropdownMenuLabel>
+
+            <DropdownMenuSeparator className="m-0" />
+
+            <DropdownMenuGroup className="p-1">
+              <DropdownMenuItem asChild>
+                <Link to="/channel/mkbhd">
+                  <User className="size-5" />
+                  Your channel
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <BrandYoutube className="size-5" />
+                YouTube Studio
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <SwitchHorizontal className="size-5" />
+                Switch account
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Logout className="size-5" />
+                Sign out
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+
+            <DropdownMenuSeparator className="m-0" />
+
+            <DropdownMenuGroup className="p-1">
+              <DropdownMenuItem>
+                <Moon className="size-5" />
+                Appearance: Device theme
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Language className="size-5" />
+                Language: English
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Settings className="size-5" />
+                Settings
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+
+            <DropdownMenuSeparator className="m-0" />
+
+            <DropdownMenuGroup className="p-1">
+              <DropdownMenuItem>
+                <Help className="size-5" />
+                Help
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Keyboard className="size-5" />
+                Keyboard shortcuts
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   )

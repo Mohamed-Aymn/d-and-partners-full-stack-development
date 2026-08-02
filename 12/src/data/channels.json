@@ -1,0 +1,141 @@
+[
+  {
+    "id": "veritasium",
+    "name": "Veritasium",
+    "handle": "@veritasium",
+    "subscribers": "16.2M",
+    "videoCount": 412,
+    "description": "An element of truth — videos about science, education, and anything else I find interesting.",
+    "avatarInitial": "V",
+    "joined": "Jul 21, 2010",
+    "location": "United States",
+    "links": [
+      {
+        "label": "Website",
+        "url": "#"
+      },
+      {
+        "label": "Twitter",
+        "url": "#"
+      }
+    ]
+  },
+  {
+    "id": "mkbhd",
+    "name": "Marques Brownlee",
+    "handle": "@MKBHD",
+    "subscribers": "19.8M",
+    "videoCount": 1680,
+    "description": "MKBHD: Quality Tech Videos | YouTuber | Geek | Consumer Electronics | Tech Head",
+    "avatarInitial": "M",
+    "joined": "Mar 21, 2008",
+    "location": "United States",
+    "links": [
+      {
+        "label": "Website",
+        "url": "#"
+      },
+      {
+        "label": "Twitter",
+        "url": "#"
+      }
+    ]
+  },
+  {
+    "id": "kurzgesagt",
+    "name": "Kurzgesagt – In a Nutshell",
+    "handle": "@kurzgesagt",
+    "subscribers": "23.1M",
+    "videoCount": 248,
+    "description": "Animation videos explaining things with optimistic nihilism. Made with love in Munich.",
+    "avatarInitial": "K",
+    "joined": "Jul 9, 2013",
+    "location": "Germany",
+    "links": [
+      {
+        "label": "Shop",
+        "url": "#"
+      }
+    ]
+  },
+  {
+    "id": "linus",
+    "name": "Linus Tech Tips",
+    "handle": "@LinusTechTips",
+    "subscribers": "16.5M",
+    "videoCount": 7120,
+    "description": "Tech reviews, tech humor, and more from Linus Sebastian and the LTT team.",
+    "avatarInitial": "L",
+    "joined": "Nov 24, 2008",
+    "location": "Canada",
+    "links": [
+      {
+        "label": "Floatplane",
+        "url": "#"
+      }
+    ]
+  },
+  {
+    "id": "fireship",
+    "name": "Fireship",
+    "handle": "@Fireship",
+    "subscribers": "3.4M",
+    "videoCount": 620,
+    "description": "High-intensity code tutorials and tech news to help you ship your app faster.",
+    "avatarInitial": "F",
+    "joined": "Aug 29, 2017",
+    "location": "United States",
+    "links": [
+      {
+        "label": "Pro",
+        "url": "#"
+      }
+    ]
+  },
+  {
+    "id": "vsauce",
+    "name": "Vsauce",
+    "handle": "@Vsauce",
+    "subscribers": "22.4M",
+    "videoCount": 430,
+    "description": "Our World is Amazing. Mind-blowing educational videos by Michael Stevens.",
+    "avatarInitial": "V",
+    "joined": "Jul 30, 2010",
+    "location": "United States",
+    "links": [
+      {
+        "label": "Website",
+        "url": "#"
+      }
+    ]
+  },
+  {
+    "id": "travis",
+    "name": "Travis Neilson",
+    "handle": "@travisneilson",
+    "subscribers": "412K",
+    "videoCount": 186,
+    "description": "Design, creativity, and the craft of making things for the web.",
+    "avatarInitial": "T",
+    "joined": "Jan 12, 2012",
+    "location": "United States",
+    "links": []
+  },
+  {
+    "id": "mrbeast",
+    "name": "MrBeast",
+    "handle": "@MrBeast",
+    "subscribers": "320M",
+    "videoCount": 820,
+    "description": "SUBSCRIBE FOR A COOKIE!",
+    "avatarInitial": "M",
+    "joined": "Feb 20, 2012",
+    "location": "United States",
+    "links": [
+      {
+        "label": "Feastables",
+        "url": "#"
+      }
+    ]
+  }
+]

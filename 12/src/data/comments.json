@@ -1,0 +1,38 @@
+[
+  {
+    "id": "c1",
+    "author": "Alex Rivera",
+    "avatarInitial": "A",
+    "text": "This completely changed how I think about the topic. Incredible production quality too.",
+    "likes": "24K",
+    "time": "2 days ago",
+    "replies": 128
+  },
+  {
+    "id": "c2",
+    "author": "Sam Chen",
+    "avatarInitial": "S",
+    "text": "The part at 8:42 blew my mind. Instantly shared this with my friends.",
+    "likes": "8.1K",
+    "time": "5 days ago",
+    "replies": 42
+  },
+  {
+    "id": "c3",
+    "author": "Jordan Lee",
+    "avatarInitial": "J",
+    "text": "Been waiting for this video all week. Never disappoints.",
+    "likes": "3.4K",
+    "time": "1 week ago",
+    "replies": 19
+  },
+  {
+    "id": "c4",
+    "author": "Taylor Brooks",
+    "avatarInitial": "T",
+    "text": "Can someone explain the graph at 12:10? Still wrapping my head around it.",
+    "likes": "1.2K",
+    "time": "1 week ago",
+    "replies": 56
+  }
+]
