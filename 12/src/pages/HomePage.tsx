@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { categories, videos } from '@/data/videos'
-import { VideoCard } from '@/components/VideoCard'
+import { VideoCard } from '@/components/pages/common/VideoCard'
 import { Button } from '@/components/ui/button'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { cn } from '@/lib/utils'

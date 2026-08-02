@@ -31,11 +31,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
 import { channels, userAvatar, videos } from '@/data/videos'
 import { cn } from '@/lib/utils'
 
@@ -80,21 +75,16 @@ export function Header({ onMenuClick }: HeaderProps) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex h-14 items-center justify-between bg-background px-2 sm:px-4">
       <div className="flex min-w-0 items-center gap-1">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="rounded-full"
-              onClick={onMenuClick}
-              aria-label="Menu"
-            >
-              <Menu2 className="size-5" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Menu</TooltipContent>
-        </Tooltip>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="rounded-full"
+          onClick={onMenuClick}
+          aria-label="Menu"
+        >
+          <Menu2 className="size-5" />
+        </Button>
         <YouTubeLogo />
       </div>
 
@@ -114,20 +104,15 @@ export function Header({ onMenuClick }: HeaderProps) {
             <Search className="size-5" />
           </Button>
         </div>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              type="button"
-              variant="secondary"
-              size="icon"
-              className="rounded-full"
-              aria-label="Search with your voice"
-            >
-              <Microphone className="size-5" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Search with your voice</TooltipContent>
-        </Tooltip>
+        <Button
+          type="button"
+          variant="secondary"
+          size="icon"
+          className="rounded-full"
+          aria-label="Search with your voice"
+        >
+          <Microphone className="size-5" />
+        </Button>
       </div>
 
       <div className="flex items-center gap-0.5 sm:gap-1">
