@@ -6,7 +6,7 @@
  * # Acceptance Criteria:
  * 1. When you run the app and navigate to /challenge2, you should 
  *    see the number increment when the button is clicked.
- * 2. Must be dong using a react hook.
+ * 2. Must be done using a react hook.
  * 
  */
 
