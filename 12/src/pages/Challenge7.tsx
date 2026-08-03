@@ -36,7 +36,7 @@ export default function Challenge7() {
   ]
 
   return (
-    <div>
+    <div className="ml-28">
       {/* render items here */}
     </div>
   )

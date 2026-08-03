@@ -16,7 +16,9 @@
 
 export default function Challenge1() {
   return (
-    <div>Challenge1</div>
+    <div className="ml-28">
+      Challenge1
+    </div>
   )
 }
 

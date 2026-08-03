@@ -19,7 +19,7 @@ export default function Challenge6() {
   ]
 
   return (
-    <div>
+    <div className="ml-28">
       {/* render items here */}
     </div>
   )
