@@ -12,7 +12,7 @@
 
 export default function Challenge2() {
   return (
-    <div>
+    <div className="ml-28">
       <button className="border-2 border-black p-1">+</button>
       <div>0</div>
     </div>
