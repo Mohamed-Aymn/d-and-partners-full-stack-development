@@ -30,13 +30,13 @@ app.get('/users', async (req, res) => {
 });
 
 // ------------------------------------------------------------------
-// 2. READ ONE (GET) - Vulnerable to SQL injection (string concatenation)
+// 2. READ ONE (GET) 
 // ------------------------------------------------------------------
 app.get('/users/:id', async (req, res) => {
   const { id } = req.params;
+  console.log(id)
 
   try {
-    // Intentionally vulnerable: user input is concatenated into the query
     const [results] = await connection.query(
       `SELECT * FROM users WHERE id = ${id}`
     );
@@ -45,7 +45,7 @@ app.get('/users/:id', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.json(results[0]);
+    res.json(results);
   } catch {
     return res.status(500).json({ message: 'Something happended' });
   }
