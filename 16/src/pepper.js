@@ -3,14 +3,9 @@ const { MongoClient, ObjectId } = require('mongodb');
 const express = require('express');
 const cors = require('cors');
 const crypto = require('crypto');
-const cookieParser = require('cookie-parser');
 
 const app = express();
 const PORT = 3000;
-
-// ------------------------------------------------------------------
-// Cryptographic Configuration & Helpers
-// ------------------------------------------------------------------
 
 // Application-wide secret pepper loaded from environment variables
 const PEPPER = process.env.PASSWORD_PEPPER;
@@ -18,13 +13,7 @@ if (!PEPPER) {
   console.warn('WARNING: PASSWORD_PEPPER environment variable is not set.');
 }
 
-// Secret key for cookie encryption (Must be 32 bytes for aes-256-gcm)
-// In production, set this in your environment variables: process.env.COOKIE_SECRET
-const COOKIE_SECRET = process.env.COOKIE_SECRET
-  ? crypto.createHash('sha256').update(process.env.COOKIE_SECRET).digest()
-  : crypto.randomBytes(32);
-
-// Password Hashing Helper with Salt and Pepper
+// Helper function to hash password with both per-user salt and app-level pepper
 const hashPasswordWithSaltAndPepper = (password, salt) => {
   return crypto
     .createHash('sha256')
@@ -32,43 +21,7 @@ const hashPasswordWithSaltAndPepper = (password, salt) => {
     .digest('hex');
 };
 
-// Cookie Encryption (AES-256-GCM)
-const encryptCookie = (text) => {
-  const iv = crypto.randomBytes(12); // 12-byte IV for GCM mode
-  const cipher = crypto.createCipheriv('aes-256-gcm', COOKIE_SECRET, iv);
-  let encrypted = cipher.update(text, 'utf8', 'hex');
-  encrypted += cipher.final('hex');
-  const authTag = cipher.getAuthTag().toString('hex');
-  // Format: iv:authTag:encryptedPayload
-  return `${iv.toString('hex')}:${authTag}:${encrypted}`;
-};
-
-// Cookie Decryption (AES-256-GCM)
-const decryptCookie = (encryptedText) => {
-  try {
-    const parts = encryptedText.split(':');
-    if (parts.length !== 3) return null;
-
-    const [ivHex, authTagHex, encryptedData] = parts;
-    const iv = Buffer.from(ivHex, 'hex');
-    const authTag = Buffer.from(authTagHex, 'hex');
-
-    const decipher = crypto.createDecipheriv('aes-256-gcm', COOKIE_SECRET, iv);
-    decipher.setAuthTag(authTag);
-
-    let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-
-    return decrypted;
-  } catch (err) {
-    // Returns null if the token has been tampered with or failed decryption
-    return null;
-  }
-};
-
-// ------------------------------------------------------------------
-// Database Configuration
-// ------------------------------------------------------------------
+// MongoDB Connection URI and Database Name
 const DB_NAME = 'mydb';
 const DB_PORT = '27017';
 const DB_HOST = 'localhost';
@@ -78,62 +31,37 @@ const MONGO_URI = `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${D
 
 let usersCollection;
 
-// ------------------------------------------------------------------
-// Global Middleware
-// ------------------------------------------------------------------
+// Middleware to parse incoming JSON payload in request bodies
 app.use(express.json());
 app.use(cors());
-app.use(cookieParser());
-
-// ------------------------------------------------------------------
-// Routes
-// ------------------------------------------------------------------
-app.get('/', (req, res) => {
-  res.send('Welcome to the Express App!');
-});
 
 app.get('/users/:id', async (req, res) => {
   const { id } = req.params;
-  const rawCookie = req.cookies.userId;
 
-  // 1. Check if the authentication cookie exists
-  if (!rawCookie) {
-    return res.status(401).json({ message: 'Unauthorized: No session cookie provided' });
-  }
-
-  // 2. Decrypt the cookie value
-  const decryptedUserId = decryptCookie(rawCookie);
-  if (!decryptedUserId) {
-    return res.status(401).json({ message: 'Unauthorized: Invalid or tampered session cookie' });
-  }
-
-  // 3. Check if the authenticated user owns this resource
-  if (decryptedUserId !== id) {
-    return res.status(403).json({ message: "Forbidden: You cannot access other users' data" });
-  }
-
-  // 4. Validate ObjectId format
+  // Validate ObjectId format
   if (!ObjectId.isValid(id)) {
     return res.status(400).json({ message: 'Invalid user ID format' });
   }
 
   try {
-    const user = await usersCollection.findOne({ _id: new ObjectId(id) });
+    const user = await usersCollection.findOne(
+      { _id: new ObjectId(id) },
+      { projection: { password: 0, salt: 0 } } // Exclude sensitive fields
+    );
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Exclude password and salt from the response
-    const { password, salt, ...safeUser } = user;
-
-    res.json(safeUser);
+    res.json(user);
   } catch (error) {
     res.status(500).json({ message: 'Something happened', error: error.message });
   }
 });
 
-// Sign Up
+// ------------------------------------------------------------------
+// 1. Sign Up (Generate unique salt, hash with salt + pepper, store salt)
+// ------------------------------------------------------------------
 app.post('/users', async (req, res) => {
   const { email, password } = req.body;
 
@@ -142,6 +70,7 @@ app.post('/users', async (req, res) => {
   }
 
   try {
+    // Generate a random 16-byte cryptographically secure salt
     const salt = crypto.randomBytes(16).toString('hex');
     const hashedPassword = hashPasswordWithSaltAndPepper(password, salt);
 
@@ -160,7 +89,9 @@ app.post('/users', async (req, res) => {
   }
 });
 
-// Sign In
+// ------------------------------------------------------------------
+// 2. Sign In (Fetch user, hash input with stored salt + pepper, compare)
+// ------------------------------------------------------------------
 app.post('/auth', async (req, res) => {
   const { email, password } = req.body;
 
@@ -169,14 +100,17 @@ app.post('/auth', async (req, res) => {
   }
 
   try {
+    // 1. Find user by email to retrieve their specific salt
     const user = await usersCollection.findOne({ email });
 
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
+    // 2. Hash the incoming password using stored salt and the app pepper
     const hashedPassword = hashPasswordWithSaltAndPepper(password, user.salt);
 
+    // 3. Compare the computed hash with the stored hash using timing-safe comparison
     const isValid = crypto.timingSafeEqual(
       Buffer.from(user.password, 'utf8'),
       Buffer.from(hashedPassword, 'utf8')
@@ -185,14 +119,6 @@ app.post('/auth', async (req, res) => {
     if (!isValid) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
-
-    // Encrypt the user ID before setting the cookie
-    const encryptedUserId = encryptCookie(user._id.toString());
-
-    res.cookie('userId', encryptedUserId, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000 // 1 day
-    });
 
     res.status(200).json({
       message: 'Sign-in successful',

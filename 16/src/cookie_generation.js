@@ -1,30 +1,38 @@
+require('dotenv').config(); // MUST be the first line
 const { MongoClient, ObjectId } = require('mongodb');
 const express = require('express');
 const cors = require('cors');
-const crypto = require('crypto')
+const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
 
 const app = express();
 const PORT = 3000;
 
-// Helper function to create a plain SHA-256 hash
-// Helper function to hash password with a provided salt using SHA-256
-const hashPasswordWithSalt = (password, salt) => {
-  return crypto.createHash('sha256').update(password + salt).digest('hex');
+// Application-wide secret pepper loaded from environment variables
+const PEPPER = process.env.PASSWORD_PEPPER;
+if (!PEPPER) {
+  console.warn('WARNING: PASSWORD_PEPPER environment variable is not set.');
+}
+
+// Helper function to hash password with both per-user salt and app-level pepper
+const hashPasswordWithSaltAndPepper = (password, salt) => {
+  return crypto
+    .createHash('sha256')
+    .update(password + salt + (PEPPER || ''))
+    .digest('hex');
 };
 
 // MongoDB Connection URI and Database Name
-// Format: mongodb://<username>:<password>@<host>:<port>/<database>?authSource=<authDB>
 const DB_NAME = 'mydb';
-const DB_PORT = "27017";
-const DB_HOST = "localhost";
+const DB_PORT = '27017';
+const DB_HOST = 'localhost';
 const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const MONGO_URI = `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?authSource=admin`;
 
 let usersCollection;
 
-// Middleware to parse incoming JSON payload in request bodies
+// Middleware to parse incoming JSON payload and cookies
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
@@ -72,9 +80,9 @@ app.get('/users/:id', async (req, res) => {
 });
 
 // ------------------------------------------------------------------
-// 1. Sign Up (Generate unique salt, hash password, store both)
+// 1. Sign Up (Generate unique salt, hash with salt + pepper, store salt)
 // ------------------------------------------------------------------
-app.post('/post', async (req, res) => {
+app.post('/users', async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -84,7 +92,7 @@ app.post('/post', async (req, res) => {
   try {
     // Generate a random 16-byte cryptographically secure salt
     const salt = crypto.randomBytes(16).toString('hex');
-    const hashedPassword = hashPasswordWithSalt(password, salt);
+    const hashedPassword = hashPasswordWithSaltAndPepper(password, salt);
 
     const result = await usersCollection.insertOne({
       email,
@@ -102,7 +110,7 @@ app.post('/post', async (req, res) => {
 });
 
 // ------------------------------------------------------------------
-// 2. Sign In (Fetch user, hash input with stored salt, compare)
+// 2. Sign In (Fetch user, hash input with stored salt + pepper, compare)
 // ------------------------------------------------------------------
 app.post('/auth', async (req, res) => {
   const { email, password } = req.body;
@@ -118,9 +126,14 @@ app.post('/auth', async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    const hashedPassword = hashPasswordWithSalt(password, user.salt);
+    const hashedPassword = hashPasswordWithSaltAndPepper(password, user.salt);
 
-    if (user.password !== hashedPassword) {
+    const isValid = crypto.timingSafeEqual(
+      Buffer.from(user.password, 'utf8'),
+      Buffer.from(hashedPassword, 'utf8')
+    );
+
+    if (!isValid) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
@@ -160,4 +173,4 @@ async function start() {
 start().catch((err) => {
   console.error('Failed to start server:', err);
   process.exit(1);
-})
+});

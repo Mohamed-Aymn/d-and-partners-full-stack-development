@@ -1,3 +1,4 @@
+require('dotenv').config(); // MUST be the first line
 const { MongoClient, ObjectId } = require('mongodb');
 const express = require('express');
 const cors = require('cors');
@@ -60,7 +61,7 @@ app.get('/users/:id', async (req, res) => {
 // ------------------------------------------------------------------
 // 1. Sign Up (Create User with Hashed Password)
 // ------------------------------------------------------------------
-app.post('/post', async (req, res) => {
+app.post('/users', async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
