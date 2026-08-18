@@ -65,14 +65,23 @@ app.get('/users/:id', async (req, res) => {
 // 3. CREATE (POST) - Add a new user
 // ------------------------------------------------------------------
 app.post('/users', async (req, res) => {
-  const { name, email } = req.body;
+  const { name, email, phone } = req.body;
 
   if (!name || !email) {
     return res.status(400).json({ message: 'Name and email are required' });
   }
 
   try {
-    const result = await usersCollection.insertOne({ name, email });
+
+
+    let result;
+    if (phone) {
+      result = await usersCollection.insertOne({ name, email, phone });
+    } else {
+      result = await usersCollection.insertOne({ name, email });
+    }
+
+
 
     res.status(201).json({
       id: result.insertedId,
