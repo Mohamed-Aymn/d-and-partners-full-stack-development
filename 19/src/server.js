@@ -4,7 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
-const authorizeUser = require('./middleware/authorizeUser');
+const createAuthorizeUser = require('./middleware/authorizeUser');
 const {
   hashPasswordWithSaltAndPepper,
   encryptCookie
@@ -12,6 +12,7 @@ const {
 
 const app = express();
 const PORT = 3000;
+const SESSION_MAX_AGE_MS = 24 * 60 * 60 * 1000; // 1 day
 
 // ------------------------------------------------------------------
 // Database Configuration
@@ -24,6 +25,9 @@ const DB_PASSWORD = process.env.DB_PASSWORD;
 const MONGO_URI = `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?authSource=admin`;
 
 let usersCollection;
+let sessionsCollection;
+
+const authorizeUser = createAuthorizeUser(() => sessionsCollection);
 
 // ------------------------------------------------------------------
 // Global Middleware
@@ -106,6 +110,7 @@ app.delete('/users/:id', authorizeUser, async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    await sessionsCollection.deleteMany({ userId: new ObjectId(id) });
     res.clearCookie('userId');
     res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
@@ -168,10 +173,18 @@ app.post('/auth', async (req, res) => {
 
     // Encrypt the user ID before setting the cookie
     const encryptedUserId = encryptCookie(user._id.toString());
+    const expiresAt = new Date(Date.now() + SESSION_MAX_AGE_MS);
+
+    await sessionsCollection.insertOne({
+      cookie: encryptedUserId,
+      userId: user._id,
+      expiresAt,
+      createdAt: new Date()
+    });
 
     res.cookie('userId', encryptedUserId, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000 // 1 day
+      maxAge: SESSION_MAX_AGE_MS
     });
 
     res.status(200).json({
@@ -195,6 +208,10 @@ async function start() {
 
   const db = client.db(DB_NAME);
   usersCollection = db.collection('users');
+  sessionsCollection = db.collection('sessions');
+
+  await sessionsCollection.createIndex({ cookie: 1 });
+  await sessionsCollection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
   app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
