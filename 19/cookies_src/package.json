@@ -1,10 +1,11 @@
 {
-  "name": "src",
+  "name": "cookies_src",
   "version": "1.0.0",
   "description": "",
-  "main": "cookie_generation.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mongodb": "^7.5.0"
+    "mongodb": "^7.6.0",
+    "monodb": "^1.5.1"
   }
 }
