@@ -225,14 +225,22 @@ async function start() {
   usersCollection = db.collection('users');
   sessionsCollection = db.collection('sessions');
 
-  await usersCollection.createIndex({ githubId: 1 }, { unique: true });
   await sessionsCollection.createIndex({ token: 1 });
-  await sessionsCollection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+  await sessionsCollection.createIndex(
+    { expiresAt: 1 },
+    { expireAfterSeconds: 0 }
+  );
 
   app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
   });
 }
+
+start().catch((err) => {
+  console.error('Failed to start server:', err);
+  process.exit(1);
+});
+
 
 start().catch((err) => {
   console.error('Failed to start server:', err);

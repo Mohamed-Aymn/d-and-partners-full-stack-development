@@ -18,11 +18,7 @@
 Create a .env file in the project root (/home/mohamedaymn/playground/work/sessions/19/.env):
 
 ```env
-DB_USER=your_mongo_user
-DB_PASSWORD=your_mongo_password
-JWT_SECRET=your_random_jwt_secret
 GITHUB_CLIENT_ID=your_github_client_id
 GITHUB_CLIENT_SECRET=your_github_client_secret
-GITHUB_CALLBACK_URL=http://localhost:3000/auth/github/callback
-GITHUB_CALLBACK_URL is optional if you use the default above.
+GITHUB_CALLBACK_URL=http://localhost:3000/auth/github/callback # GITHUB_CALLBACK_URL is optional if you use the default above.
 ```
