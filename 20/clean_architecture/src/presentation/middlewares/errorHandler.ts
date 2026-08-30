@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
-import { isAppError, type AppErrorCode } from '../../domain/errors/AppError';
+import { isAppError, type AppErrorCode } from '../../application/errors/AppError';
 
 const HTTP_STATUS: Record<AppErrorCode, number> = {
   VALIDATION: 400,

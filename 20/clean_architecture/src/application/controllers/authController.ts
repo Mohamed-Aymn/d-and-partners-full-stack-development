@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { unauthorizedError, validationError } from '../../domain/errors/AppError';
+import { unauthorizedError, validationError } from '../errors/AppError';
 import type {
   PasswordHasher,
   Repository,

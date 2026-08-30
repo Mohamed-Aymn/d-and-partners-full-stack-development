@@ -3,7 +3,7 @@ import {
   forbiddenError,
   unauthorizedError,
   validationError
-} from '../../domain/errors/AppError';
+} from '../../application/errors/AppError';
 import type {
   IdValidator,
   Repository,

@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { notFoundError, validationError } from '../../domain/errors/AppError';
+import { notFoundError, validationError } from '../errors/AppError';
 import type { PasswordHasher, Repository } from '../../persistence/types';
 import {
   toSafeUser,
