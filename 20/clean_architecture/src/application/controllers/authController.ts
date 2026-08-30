@@ -1,23 +1,21 @@
 import type { Request, Response } from 'express';
 import { unauthorizedError, validationError } from '../../domain/errors/AppError';
-import { toPublicUser } from '../../domain/entities/User';
 import type {
   PasswordHasher,
-  SessionRepository,
-  TokenService,
-  UserRepository
+  Repository,
+  TokenService
 } from '../../persistence/types';
+import { toPublicUser, toUserRecord, USERS_COLLECTION } from '../models/user';
+import { SESSIONS_COLLECTION, type SessionSchema } from '../models/session';
 
 type AuthControllerDeps = {
-  userRepository: UserRepository;
-  sessionRepository: SessionRepository;
+  repository: Repository;
   passwordHasher: PasswordHasher;
   tokenService: TokenService;
 };
 
 export function createAuthController({
-  userRepository,
-  sessionRepository,
+  repository,
   passwordHasher,
   tokenService
 }: AuthControllerDeps) {
@@ -31,26 +29,28 @@ export function createAuthController({
       throw validationError('Email and password are required');
     }
 
-    const user = await userRepository.findByEmail(email);
+    const user = toUserRecord(
+      await repository.findOne(USERS_COLLECTION, { email })
+    );
     if (!user) {
       throw unauthorizedError('Invalid email or password');
     }
 
-    const isValid = passwordHasher.verify(password, user.salt, user.passwordHash);
+    const isValid = passwordHasher.verify(password, user.salt, user.password);
     if (!isValid) {
       throw unauthorizedError('Invalid email or password');
     }
 
-    const token = tokenService.sign(user.id);
+    const token = tokenService.sign(user._id);
     const now = new Date();
-    const expiresAt = new Date(now.getTime() + tokenService.sessionMaxAgeMs);
-
-    await sessionRepository.create({
+    const session: SessionSchema = {
       token,
-      userId: user.id,
-      expiresAt,
+      userId: user._id,
+      expiresAt: new Date(now.getTime() + tokenService.sessionMaxAgeMs),
       createdAt: now
-    });
+    };
+
+    await repository.insert(SESSIONS_COLLECTION, session);
 
     res.status(200).json({
       message: 'Sign-in successful',

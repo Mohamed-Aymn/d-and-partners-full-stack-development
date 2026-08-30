@@ -1,34 +1,33 @@
-import type { Session } from '../domain/entities/Session';
-import type { User } from '../domain/entities/User';
-
-export type UserRepository = {
-  findById(id: string): Promise<User | null>;
-  findByEmail(email: string): Promise<User | null>;
-  create(data: {
-    email: string;
-    passwordHash: string;
-    salt: string;
-  }): Promise<User>;
-  update(
-    id: string,
-    fields: {
-      email?: string;
-      passwordHash?: string;
-      salt?: string;
-    }
-  ): Promise<User | null>;
-  deleteById(id: string): Promise<boolean>;
+export type StoredDocument = {
+  _id: string;
+  [key: string]: unknown;
 };
 
-export type SessionRepository = {
-  create(data: {
-    token: string;
-    userId: string;
-    expiresAt: Date;
-    createdAt: Date;
-  }): Promise<Session>;
-  findValidByToken(token: string): Promise<Session | null>;
-  deleteByUserId(userId: string): Promise<void>;
+export type Repository = {
+  findById(collection: string, id: string): Promise<StoredDocument | null>;
+  findOne(
+    collection: string,
+    filter: Record<string, unknown>
+  ): Promise<StoredDocument | null>;
+  insert(
+    collection: string,
+    data: Record<string, unknown>
+  ): Promise<StoredDocument>;
+  updateById(
+    collection: string,
+    id: string,
+    data: Record<string, unknown>
+  ): Promise<StoredDocument | null>;
+  deleteById(collection: string, id: string): Promise<boolean>;
+  deleteMany(
+    collection: string,
+    filter: Record<string, unknown>
+  ): Promise<void>;
+  createIndex(
+    collection: string,
+    keys: Record<string, 1 | -1>,
+    options?: { expireAfterSeconds?: number }
+  ): Promise<void>;
 };
 
 export type PasswordHasher = {

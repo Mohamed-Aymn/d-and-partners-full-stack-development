@@ -6,18 +6,19 @@ import {
 } from '../../domain/errors/AppError';
 import type {
   IdValidator,
-  SessionRepository,
+  Repository,
   TokenService
 } from '../../persistence/types';
+import { SESSIONS_COLLECTION, toSessionRecord } from '../../application/models/session';
 
 export type AuthorizeUserDeps = {
-  sessionRepository: SessionRepository;
+  repository: Repository;
   tokenService: TokenService;
   idValidator: IdValidator;
 };
 
 export function createAuthorizeUserMiddleware({
-  sessionRepository,
+  repository,
   tokenService,
   idValidator
 }: AuthorizeUserDeps) {
@@ -35,7 +36,12 @@ export function createAuthorizeUserMiddleware({
       throw unauthorizedError('Unauthorized: Invalid or expired token');
     }
 
-    const session = await sessionRepository.findValidByToken(token);
+    const session = toSessionRecord(
+      await repository.findOne(SESSIONS_COLLECTION, {
+        token,
+        expiresAt: { $gt: new Date() }
+      })
+    );
     if (!session) {
       throw unauthorizedError('Unauthorized: Invalid or expired session');
     }

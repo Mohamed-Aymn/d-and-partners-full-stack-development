@@ -1,21 +1,21 @@
 import type { Request, Response } from 'express';
 import { notFoundError, validationError } from '../../domain/errors/AppError';
-import { toSafeUserDocument } from '../../domain/entities/User';
-import type {
-  PasswordHasher,
-  SessionRepository,
-  UserRepository
-} from '../../persistence/types';
+import type { PasswordHasher, Repository } from '../../persistence/types';
+import {
+  toSafeUser,
+  toUserRecord,
+  USERS_COLLECTION,
+  type UserSchema
+} from '../models/user';
+import { SESSIONS_COLLECTION } from '../models/session';
 
 type UserControllerDeps = {
-  userRepository: UserRepository;
-  sessionRepository: SessionRepository;
+  repository: Repository;
   passwordHasher: PasswordHasher;
 };
 
 export function createUserController({
-  userRepository,
-  sessionRepository,
+  repository,
   passwordHasher
 }: UserControllerDeps) {
   async function create(req: Request, res: Response) {
@@ -29,26 +29,30 @@ export function createUserController({
     }
 
     const salt = passwordHasher.generateSalt();
-    const passwordHash = passwordHasher.hash(password, salt);
-    const user = await userRepository.create({
+    const data: UserSchema = {
       email,
-      passwordHash,
+      password: passwordHasher.hash(password, salt),
       salt
-    });
+    };
+
+    const created = await repository.insert(USERS_COLLECTION, data);
+    const user = toUserRecord(created);
 
     res.status(201).json({
-      id: user.id,
-      email: user.email
+      id: user?._id,
+      email: user?.email
     });
   }
 
   async function show(req: Request, res: Response) {
-    const user = await userRepository.findById(req.params.id as string);
+    const user = toUserRecord(
+      await repository.findById(USERS_COLLECTION, req.params.id as string)
+    );
     if (!user) {
       throw notFoundError('User not found');
     }
 
-    res.json(toSafeUserDocument(user));
+    res.json(toSafeUser(user));
   }
 
   async function update(req: Request, res: Response) {
@@ -61,38 +65,40 @@ export function createUserController({
       throw validationError('Email or password is required');
     }
 
-    const fields: {
-      email?: string;
-      passwordHash?: string;
-      salt?: string;
-    } = {};
+    const data: Partial<UserSchema> = {};
 
     if (email) {
-      fields.email = email;
+      data.email = email;
     }
 
     if (password) {
       const salt = passwordHasher.generateSalt();
-      fields.salt = salt;
-      fields.passwordHash = passwordHasher.hash(password, salt);
+      data.salt = salt;
+      data.password = passwordHasher.hash(password, salt);
     }
 
-    const user = await userRepository.update(req.params.id as string, fields);
+    const user = toUserRecord(
+      await repository.updateById(
+        USERS_COLLECTION,
+        req.params.id as string,
+        data
+      )
+    );
     if (!user) {
       throw notFoundError('User not found');
     }
 
-    res.json(toSafeUserDocument(user));
+    res.json(toSafeUser(user));
   }
 
   async function destroy(req: Request, res: Response) {
     const id = req.params.id as string;
-    const deleted = await userRepository.deleteById(id);
+    const deleted = await repository.deleteById(USERS_COLLECTION, id);
     if (!deleted) {
       throw notFoundError('User not found');
     }
 
-    await sessionRepository.deleteByUserId(id);
+    await repository.deleteMany(SESSIONS_COLLECTION, { userId: id });
     res.status(200).json({ message: 'User deleted successfully' });
   }
 
