@@ -1,6 +1,7 @@
-const crypto = require('crypto');
+import crypto from 'node:crypto';
+import type { PasswordHasher } from './types';
 
-function createSha256PasswordHasher(pepper) {
+export function createSha256PasswordHasher(pepper?: string): PasswordHasher {
   const resolvedPepper = pepper || '';
 
   if (!pepper) {
@@ -11,14 +12,14 @@ function createSha256PasswordHasher(pepper) {
     return crypto.randomBytes(16).toString('hex');
   }
 
-  function hash(password, salt) {
+  function hash(password: string, salt: string) {
     return crypto
       .createHash('sha256')
       .update(password + salt + resolvedPepper)
       .digest('hex');
   }
 
-  function verify(password, salt, passwordHash) {
+  function verify(password: string, salt: string, passwordHash: string) {
     const hashedPassword = hash(password, salt);
 
     return crypto.timingSafeEqual(
@@ -33,5 +34,3 @@ function createSha256PasswordHasher(pepper) {
     verify
   };
 }
-
-module.exports = createSha256PasswordHasher;

@@ -1,4 +1,18 @@
-function loadConfig() {
+export type Config = {
+  port: number;
+  db: {
+    name: string;
+    host: string;
+    port: string;
+    user: string | undefined;
+    password: string | undefined;
+    uri: string;
+  };
+  passwordPepper: string | undefined;
+  jwtSecret: string | undefined;
+};
+
+export function loadConfig(): Config {
   const dbUser = process.env.DB_USER;
   const dbPassword = process.env.DB_PASSWORD;
   const dbHost = process.env.DB_HOST || 'localhost';
@@ -19,5 +33,3 @@ function loadConfig() {
     jwtSecret: process.env.JWT_SECRET
   };
 }
-
-module.exports = { loadConfig };

@@ -2,22 +2,31 @@
   "name": "cookies_src",
   "version": "1.0.0",
   "description": "",
-  "main": "src/server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/server.js"
+    "dev": "vite-node --watch src/server.ts",
+    "build": "vite build",
+    "start": "node dist/server.js",
+    "seed": "vite-node src/persistence/seed/index.ts",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "mongodb": "^7.6.0",
-    "monodb": "^1.5.1"
+    "mongodb": "^7.6.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.5.2",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.5",
+    "vite-node": "^3.2.4"
   }
 }

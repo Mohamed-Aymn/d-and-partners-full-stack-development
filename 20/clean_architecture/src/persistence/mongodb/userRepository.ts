@@ -1,7 +1,14 @@
-const { ObjectId } = require('mongodb');
-const { createUser } = require('../../domain/entities/User');
+import { ObjectId, type Collection, type WithId } from 'mongodb';
+import { createUser, type User } from '../../domain/entities/User';
+import type { UserRepository } from '../types';
 
-function toUser(document) {
+type UserDocument = {
+  email: string;
+  password: string;
+  salt: string;
+};
+
+function toUser(document: WithId<UserDocument> | null): User | null {
   if (!document) {
     return null;
   }
@@ -14,18 +21,26 @@ function toUser(document) {
   });
 }
 
-function createMongoUserRepository(collection) {
-  async function findById(id) {
+export function createMongoUserRepository(collection: Collection): UserRepository {
+  async function findById(id: string) {
     const document = await collection.findOne({ _id: new ObjectId(id) });
-    return toUser(document);
+    return toUser(document as WithId<UserDocument> | null);
   }
 
-  async function findByEmail(email) {
+  async function findByEmail(email: string) {
     const document = await collection.findOne({ email });
-    return toUser(document);
+    return toUser(document as WithId<UserDocument> | null);
   }
 
-  async function create({ email, passwordHash, salt }) {
+  async function create({
+    email,
+    passwordHash,
+    salt
+  }: {
+    email: string;
+    passwordHash: string;
+    salt: string;
+  }) {
     const result = await collection.insertOne({
       email,
       password: passwordHash,
@@ -40,8 +55,15 @@ function createMongoUserRepository(collection) {
     });
   }
 
-  async function update(id, fields) {
-    const updateFields = {};
+  async function update(
+    id: string,
+    fields: {
+      email?: string;
+      passwordHash?: string;
+      salt?: string;
+    }
+  ) {
+    const updateFields: Partial<UserDocument> = {};
 
     if (fields.email) {
       updateFields.email = fields.email;
@@ -61,10 +83,10 @@ function createMongoUserRepository(collection) {
       { returnDocument: 'after' }
     );
 
-    return toUser(document);
+    return toUser(document as WithId<UserDocument> | null);
   }
 
-  async function deleteById(id) {
+  async function deleteById(id: string) {
     const result = await collection.deleteOne({ _id: new ObjectId(id) });
     return result.deletedCount > 0;
   }
@@ -77,5 +99,3 @@ function createMongoUserRepository(collection) {
     deleteById
   };
 }
-
-module.exports = createMongoUserRepository;

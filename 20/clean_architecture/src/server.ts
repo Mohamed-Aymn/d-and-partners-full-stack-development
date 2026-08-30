@@ -1,17 +1,14 @@
-const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env') });
-
-const { loadConfig } = require('./persistence/config');
-const { connectMongo } = require('./persistence/mongodb/connectMongo');
-const createMongoUserRepository = require('./persistence/mongodb/userRepository');
-const createMongoSessionRepository = require('./persistence/mongodb/sessionRepository');
-const createMongoIdValidator = require('./persistence/mongodb/idValidator');
-const createSha256PasswordHasher = require('./persistence/passwordHasher');
-const createJwtTokenService = require('./persistence/tokenService');
-
-const createUserController = require('./application/controllers/userController');
-const createAuthController = require('./application/controllers/authController');
-const createApp = require('./presentation/createApp');
+import './loadEnv';
+import { loadConfig } from './persistence/config';
+import { connectMongo } from './persistence/mongodb/connectMongo';
+import { createMongoUserRepository } from './persistence/mongodb/userRepository';
+import { createMongoSessionRepository } from './persistence/mongodb/sessionRepository';
+import { createMongoIdValidator } from './persistence/mongodb/idValidator';
+import { createSha256PasswordHasher } from './persistence/passwordHasher';
+import { createJwtTokenService } from './persistence/tokenService';
+import { createUserController } from './application/controllers/userController';
+import { createAuthController } from './application/controllers/authController';
+import { createApp } from './presentation/createApp';
 
 async function start() {
   const config = loadConfig();
@@ -57,7 +54,7 @@ async function start() {
   });
 }
 
-start().catch((err) => {
+start().catch((err: unknown) => {
   console.error('Failed to start server:', err);
   process.exit(1);
 });

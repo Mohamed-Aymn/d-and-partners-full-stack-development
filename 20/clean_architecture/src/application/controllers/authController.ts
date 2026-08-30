@@ -1,14 +1,31 @@
-const { validationError, unauthorizedError } = require('../../domain/errors/AppError');
-const { toPublicUser } = require('../../domain/entities/User');
+import type { Request, Response } from 'express';
+import { unauthorizedError, validationError } from '../../domain/errors/AppError';
+import { toPublicUser } from '../../domain/entities/User';
+import type {
+  PasswordHasher,
+  SessionRepository,
+  TokenService,
+  UserRepository
+} from '../../persistence/types';
 
-function createAuthController({
+type AuthControllerDeps = {
+  userRepository: UserRepository;
+  sessionRepository: SessionRepository;
+  passwordHasher: PasswordHasher;
+  tokenService: TokenService;
+};
+
+export function createAuthController({
   userRepository,
   sessionRepository,
   passwordHasher,
   tokenService
-}) {
-  async function create(req, res) {
-    const { email, password } = req.body;
+}: AuthControllerDeps) {
+  async function create(req: Request, res: Response) {
+    const { email, password } = req.body as {
+      email?: string;
+      password?: string;
+    };
 
     if (!email || !password) {
       throw validationError('Email and password are required');
@@ -45,4 +62,4 @@ function createAuthController({
   return { create };
 }
 
-module.exports = createAuthController;
+export type AuthController = ReturnType<typeof createAuthController>;

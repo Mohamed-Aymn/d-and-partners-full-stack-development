@@ -1,11 +1,26 @@
-const asyncHandler = require('./asyncHandler');
-const {
-  validationError,
+import { asyncHandler } from './asyncHandler';
+import {
+  forbiddenError,
   unauthorizedError,
-  forbiddenError
-} = require('../../domain/errors/AppError');
+  validationError
+} from '../../domain/errors/AppError';
+import type {
+  IdValidator,
+  SessionRepository,
+  TokenService
+} from '../../persistence/types';
 
-function createAuthorizeUserMiddleware({ sessionRepository, tokenService, idValidator }) {
+export type AuthorizeUserDeps = {
+  sessionRepository: SessionRepository;
+  tokenService: TokenService;
+  idValidator: IdValidator;
+};
+
+export function createAuthorizeUserMiddleware({
+  sessionRepository,
+  tokenService,
+  idValidator
+}: AuthorizeUserDeps) {
   return asyncHandler(async (req, _res, next) => {
     const authorizationHeader = req.headers.authorization;
 
@@ -25,13 +40,15 @@ function createAuthorizeUserMiddleware({ sessionRepository, tokenService, idVali
       throw unauthorizedError('Unauthorized: Invalid or expired session');
     }
 
-    if (!idValidator.isValid(req.params.id)) {
+    const resourceUserId = req.params.id as string;
+
+    if (!idValidator.isValid(resourceUserId)) {
       throw validationError('Invalid user ID format');
     }
 
     const authenticatedUserId = session.userId;
 
-    if (authenticatedUserId !== req.params.id || authenticatedUserId !== payload.userId) {
+    if (authenticatedUserId !== resourceUserId || authenticatedUserId !== payload.userId) {
       throw forbiddenError("Forbidden: You cannot access other users' data");
     }
 
@@ -39,5 +56,3 @@ function createAuthorizeUserMiddleware({ sessionRepository, tokenService, idVali
     next();
   });
 }
-
-module.exports = createAuthorizeUserMiddleware;
