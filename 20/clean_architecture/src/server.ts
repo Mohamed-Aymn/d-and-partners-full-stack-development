@@ -1,6 +1,6 @@
 import './loadEnv';
 import { loadConfig } from './persistence/config';
-import { connectMongo } from './persistence/mongodb/connectMongo';
+import { getMongoDb } from './persistence/mongodb/connectMongo';
 import { createPersistence } from './persistence/createPersistence';
 import { createUserController } from './application/controllers/userController';
 import { createAuthController } from './application/controllers/authController';
@@ -9,8 +9,7 @@ import { ensureSessionIndexes } from './application/models/session';
 
 async function start() {
   const config = loadConfig();
-  const client = await connectMongo(config.db.uri);
-  const db = client.db(config.db.name);
+  const db = await getMongoDb(config.db.uri, config.db.name);
   const persistence = await createPersistence(db, config);
   await ensureSessionIndexes(persistence.repository);
 

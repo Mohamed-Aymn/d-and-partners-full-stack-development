@@ -1,14 +1,13 @@
 import '../../loadEnv';
 import { loadConfig } from '../config';
-import { connectMongo } from '../mongodb/connectMongo';
+import { closeMongo, getMongoDb } from '../mongodb/connectMongo';
 import { createPersistence } from '../createPersistence';
 import { toUserRecord, USERS_COLLECTION, type UserSchema } from '../../application/models/user';
 import { seedUsers } from './users';
 
 async function seed() {
   const config = loadConfig();
-  const client = await connectMongo(config.db.uri);
-  const db = client.db(config.db.name);
+  const db = await getMongoDb(config.db.uri, config.db.name);
   const { repository, passwordHasher } = await createPersistence(db, config);
 
   for (const user of seedUsers) {
@@ -31,7 +30,7 @@ async function seed() {
     console.log(`Seeded user: ${user.email}`);
   }
 
-  await client.close();
+  await closeMongo();
   console.log('Seed complete');
 }
 
