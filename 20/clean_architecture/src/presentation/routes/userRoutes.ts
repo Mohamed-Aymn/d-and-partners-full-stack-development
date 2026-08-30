@@ -4,7 +4,7 @@ import {
   createAuthorizeUserMiddleware,
   type AuthorizeUserDeps
 } from '../middlewares/authorizeUser';
-import type { UserController } from '../../application/controllers/userController';
+import type { UserController } from '../../application/controllers/userControllers';
 
 type UserRouterDeps = {
   userController: UserController;

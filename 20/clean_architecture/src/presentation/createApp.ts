@@ -3,8 +3,8 @@ import cors from 'cors';
 import { createUserRouter } from './routes/userRoutes';
 import { createAuthRouter } from './routes/authRoutes';
 import { errorHandler } from './middlewares/errorHandler';
-import type { UserController } from '../application/controllers/userController';
-import type { AuthController } from '../application/controllers/authController';
+import type { UserController } from '../application/controllers/userControllers';
+import type { AuthController } from '../application/controllers/authControllers';
 import type { AuthorizeUserDeps } from './middlewares/authorizeUser';
 
 export type AppDependencies = {

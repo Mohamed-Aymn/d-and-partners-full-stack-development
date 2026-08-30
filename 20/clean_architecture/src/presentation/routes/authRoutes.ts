@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { asyncHandler } from '../middlewares/asyncHandler';
-import type { AuthController } from '../../application/controllers/authController';
+import type { AuthController } from '../../application/controllers/authControllers';
 
 type AuthRouterDeps = {
   authController: AuthController;

@@ -2,8 +2,8 @@ import './loadEnv';
 import { loadConfig } from './persistence/config';
 import { getMongoDb } from './persistence/mongodb/connectMongo';
 import { createPersistence } from './persistence/createPersistence';
-import { createUserController } from './application/controllers/userController';
-import { createAuthController } from './application/controllers/authController';
+import { createUserControllers } from './application/controllers/userControllers';
+import { createAuthControllers } from './application/controllers/authControllers';
 import { createApp } from './presentation/createApp';
 import { ensureSessionIndexes } from './application/models/session';
 
@@ -13,8 +13,8 @@ async function start() {
   const persistence = await createPersistence(db, config);
   await ensureSessionIndexes(persistence.repository);
 
-  const userController = createUserController(persistence);
-  const authController = createAuthController(persistence);
+  const userController = createUserControllers(persistence);
+  const authController = createAuthControllers(persistence);
 
   const app = createApp({
     userController,

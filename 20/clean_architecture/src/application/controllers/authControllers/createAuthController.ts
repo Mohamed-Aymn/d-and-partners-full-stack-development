@@ -1,25 +1,15 @@
 import type { Request, Response } from 'express';
-import { unauthorizedError, validationError } from '../errors/AppError';
-import type {
-  PasswordHasher,
-  Repository,
-  TokenService
-} from '../../persistence/types';
-import { toPublicUser, toUserRecord, USERS_COLLECTION } from '../models/user';
-import { SESSIONS_COLLECTION, type SessionSchema } from '../models/session';
-
-type AuthControllerDeps = {
-  repository: Repository;
-  passwordHasher: PasswordHasher;
-  tokenService: TokenService;
-};
+import { unauthorizedError, validationError } from '../../errors/AppError';
+import { toPublicUser, toUserRecord, USERS_COLLECTION } from '../../models/user';
+import { SESSIONS_COLLECTION, type SessionSchema } from '../../models/session';
+import type { AuthControllerDeps } from './types';
 
 export function createAuthController({
   repository,
   passwordHasher,
   tokenService
 }: AuthControllerDeps) {
-  async function create(req: Request, res: Response) {
+  return async function createAuth(req: Request, res: Response) {
     const { email, password } = req.body as {
       email?: string;
       password?: string;
@@ -57,9 +47,5 @@ export function createAuthController({
       token,
       user: toPublicUser(user)
     });
-  }
-
-  return { create };
+  };
 }
-
-export type AuthController = ReturnType<typeof createAuthController>;
