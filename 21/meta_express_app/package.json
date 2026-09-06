@@ -1,0 +1,15 @@
+{
+  "name": "meta_express_app",
+  "version": "1.0.0",
+  "description": "Express app serving API routes and HTML pages for users and todo items",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "keywords": ["express", "api"],
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

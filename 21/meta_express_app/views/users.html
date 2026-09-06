@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Users</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <nav><a href="/">Home</a> · <a href="/todo-items">Todo Items</a></nav>
+      <h1>Users</h1>
+      <p>Data loaded from <code>/api/users</code></p>
+      <ul id="users-list" class="list">Loading…</ul>
+    </main>
+    <script>
+      async function loadUsers() {
+        const list = document.getElementById("users-list");
+        try {
+          const res = await fetch("/api/users");
+          const users = await res.json();
+          list.innerHTML = users
+            .map(
+              (user) =>
+                `<li><strong>${user.name}</strong><br /><span>${user.email}</span></li>`
+            )
+            .join("");
+        } catch (err) {
+          list.textContent = "Failed to load users.";
+          console.error(err);
+        }
+      }
+      loadUsers();
+    </script>
+  </body>
+</html>
